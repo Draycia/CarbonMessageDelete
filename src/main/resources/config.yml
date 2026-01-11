@@ -1,1 +1,2 @@
 button_format: "<hover:show_text:'Click to delete message.'><red>[X]</red></hover>"
+invalid_button_format: "<hover:show_text:'This message cannot be deleted.'><gray>[X]</gray></hover>"

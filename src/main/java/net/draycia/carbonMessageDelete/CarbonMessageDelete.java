@@ -12,6 +12,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public final class CarbonMessageDelete extends JavaPlugin {
 
@@ -29,10 +30,20 @@ public final class CarbonMessageDelete extends JavaPlugin {
                     return message;
                 }
 
-                final Component prefix = getConfig().getComponent("button_format", MiniMessage.miniMessage()).clickEvent(ClickEvent.callback(player -> {
-                    deleteMessage(event.signedMessage().signature());
-                }));
-                
+                final @Nullable Component prefix;
+
+                if (event.signedMessage() == null) {
+                    prefix = getConfig().getComponent("invalid_button_format", MiniMessage.miniMessage());
+                } else {
+                    prefix = getConfig().getComponent("button_format", MiniMessage.miniMessage()).clickEvent(ClickEvent.callback(player -> {
+                        deleteMessage(event.signedMessage().signature());
+                    }));
+                }
+
+                if (prefix == null || Component.empty().equals(prefix)) {
+                    return message;
+                }
+
                 return Component.text("").append(prefix).append(message);
             }));
         });
