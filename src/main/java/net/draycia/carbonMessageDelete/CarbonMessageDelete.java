@@ -24,7 +24,7 @@ public final class CarbonMessageDelete extends JavaPlugin {
 
         this.carbonChat = CarbonChatProvider.carbonChat();
 
-        this.carbonChat.eventHandler().subscribe(CarbonChatEvent.class, event -> {
+        this.carbonChat.eventHandler().subscribe(CarbonChatEvent.class, 1000, false, event -> {
             event.renderers().add(KeyedRenderer.keyedRenderer(Key.key("message_delete"), (sender, recipient, message, original) -> {
                 if (!(recipient instanceof CarbonPlayer rPlayer) || !rPlayer.hasPermission("carbon.message_delete")) {
                     return message;
