@@ -32,11 +32,11 @@ public final class CarbonMessageDelete extends JavaPlugin {
 
                 final @Nullable Component prefix;
 
-                if (event.signedMessage() == null) {
+                if (signature(event.signedMessage()) == null) {
                     prefix = getConfig().getComponent("invalid_button_format", MiniMessage.miniMessage());
                 } else {
                     prefix = getConfig().getComponent("button_format", MiniMessage.miniMessage()).clickEvent(ClickEvent.callback(player -> {
-                        deleteMessage(event.signedMessage().signature());
+                        deleteMessage(signature(event.signedMessage()));
                     }));
                 }
 
@@ -54,7 +54,14 @@ public final class CarbonMessageDelete extends JavaPlugin {
 
     }
 
-    public void deleteMessage(final SignedMessage.Signature signature) {
+    static SignedMessage.@Nullable Signature signature(final @Nullable SignedMessage message) {
+        return message == null ? null : message.signature();
+    }
+
+    public void deleteMessage(final SignedMessage.@Nullable Signature signature) {
+        if (signature == null) {
+            return;
+        }
         for (final CarbonPlayer player : this.carbonChat.server().players()) {
             player.deleteMessage(signature);
         }
